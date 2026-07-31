@@ -45,7 +45,7 @@ Created one security group per department:
 Users were added to their respective department groups. During this process I caught a privilege creep error — a user was accidentally added to a second department group. This was identified during a group membership audit and corrected immediately. This is a realistic scenario: unauthorized group membership is a common finding in enterprise AD audits and a potential attacker persistence mechanism.
 
 ### Admin Accounts
-Created a dedicated admin account and added it to the **Domain Admins** built-in group, following the principle of least privilege — admin accounts are kept separate from day-to-day user accounts.
+Created a dedicated admin account (admin.smith) and added it to the **Domain Admins** built-in group, following the principle of least privilege — admin accounts are kept separate from day-to-day user accounts.
 
 ### Group Policy Objects
 Configured four GPOs linked to the domain:
@@ -71,7 +71,7 @@ Enabled Windows Security auditing to capture:
 | 4728 | Member added to security-enabled global group |
 | 4688 | Process creation |
 
-Generated and confirmed live event capture in Event Viewer, including a deliberate failed logon (4625) to validate the audit pipeline end to end.
+Generated and confirmed live event capture in Event Viewer, including a deliberate failed logon (4625) and a privileged group membership change (4728) to validate the full audit pipeline.
 
 ---
 
@@ -95,6 +95,46 @@ This lab demonstrates the full chain: GPO enables the audit → Windows generate
 
 ---
 
+## Screenshots
+
+**OU Tree and Department Structure**
+![OU Tree](Image%201_.png)
+
+**I.T. OU — Users and Admin Account**
+![IT OU](Image%202.png)
+
+**Sales OU**
+![Sales OU](Image%203.png)
+
+**Human Resources OU**
+![HR OU](Image%204.png)
+
+**IT-Staff Group Members**
+![IT Staff Group](Image%205.png)
+
+**Sales-Staff Group Members**
+![Sales Staff Group](Image%206.png)
+
+**Human Resources-Staff Group Members**
+![HR Staff Group](Image%207.png)
+
+**Domain Admins — Privileged Group Members**
+![Domain Admins](Image%208.png)
+
+**GPO Overview — All Policies Linked to lab.local**
+![GPO Overview](Image%209.png)
+
+**GPO Verification — gpresult /r Output**
+![GPResult](Image%2010.png)
+
+**Event ID 4728 — Member Added to Domain Admins**
+![Event 4728](Image%2011.png)
+
+**Event ID 4625 — Failed Logon Detection**
+![Event 4625](Image%2012.png)
+
+---
+
 ## Lessons Learned
 
 - **Privilege creep happens fast.** Bulk-adding users to groups is efficient but requires an immediate membership audit — I caught a user in the wrong security group and it reinforced why AD auditing exists.
@@ -105,18 +145,13 @@ This lab demonstrates the full chain: GPO enables the audit → Windows generate
 
 ---
 
-## Screenshots
-
-> *(Add screenshots here inline — OU tree, user list, group membership, GPO settings, gpresult output, Event Viewer 4625/4728 events)*
-
----
-
 ## Repository Structure
 
 ```
 jamal-security-home-lab/
 └── 01-active-directory-lab/
-    └── README.md
+    ├── README.md
+    └── Images 1-12 (lab screenshots)
 ```
 
 ---
