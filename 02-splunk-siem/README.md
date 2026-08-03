@@ -24,54 +24,54 @@ flowchart LR
 
 1. Provisioned an Ubuntu Server 22.04 VM in Azure, in the same resource group as the Project 01 AD VM.
 
-   ![Splunk status confirming splunkd running](screenshots/splunk-status.png)
+   ![Splunk status confirming splunkd running](Image%201.png)
 
 2. Hardened SSH access: created a non-root sudo user (`splunkadmin`) and explicitly set `PermitRootLogin no` in `sshd_config`, disabling direct root login over SSH. This matters because a compromised root credential over SSH gives an attacker unrestricted access with no accountability trail — forcing sudo-based access means every privileged action is tied to a named account and logged.
 
-   ![sshd_config showing PermitRootLogin no](screenshots/ssh-hardening.png)
+   ![sshd_config showing PermitRootLogin no](Image%202.png)
 
 3. Installed Splunk Enterprise (trial license) via the `.deb` package, started the service, and created admin credentials through the web UI on port 8000.
 4. Installed the Splunk Universal Forwarder on the Windows Server 2022 domain controller, configured it to monitor the Windows Security event log, and pointed it at the Splunk indexer.
 
-   ![Task Manager showing SplunkForwarder service running](screenshots/forwarder-running.png)
+   ![Task Manager showing SplunkForwarder service running](Image%204.png)
 
 5. Confirmed Windows Security events were arriving in Splunk with:
    ```
    index=* sourcetype=WinEventLog:Security
    ```
 
-   ![Search results showing thousands of Windows Security events indexed](screenshots/indexing-confirmation.png)
+   ![Search results showing thousands of Windows Security events indexed](Image%203.png)
 
 6. Built a search isolating the specific event of interest — a member being added to a security-enabled global group (Domain Admins):
    ```
    index=* sourcetype=WinEventLog:Security EventCode=4728
    ```
 
-   ![EventCode=4728 search results showing a Domain Admins group change](screenshots/spl-search-4728.png)
+   ![EventCode=4728 search results showing a Domain Admins group change](Image%205.png)
 
 7. Saved that search as a scheduled alert (runs every 5 minutes, triggers when results > 0), and confirmed it fired against a live test event.
 
-   ![Alert configuration showing schedule and trigger condition](screenshots/alert-config.png)
-   ![Alert trigger history showing the alert firing on schedule](screenshots/alert-triggered.png)
+   ![Alert configuration showing schedule and trigger condition](Image%206.png)
+   ![Alert trigger history showing the alert firing on schedule](Image%208.png)
 
 8. Built a dashboard panel (column chart) visualizing EventCode=4728 occurrences over time.
 
-   ![Dashboard panel showing 4728 events over time](screenshots/dashboard-panel.png)
+   ![Dashboard panel showing 4728 events over time](Image%207.png)
 
 ## Screenshots
 
-All screenshots are in `screenshots/` — Azure public/private IPs redacted throughout.
+All screenshots sit directly in this folder — Azure public/private IPs redacted throughout.
 
 | File | Description |
 |---|---|
-| `splunk-status.png` | `splunk status` confirming splunkd running on the indexer |
-| `ssh-hardening.png` | `sshd_config` showing `PermitRootLogin no` |
-| `indexing-confirmation.png` | Search results for all Windows Security events flowing in |
-| `forwarder-running.png` | Task Manager showing the SplunkForwarder service running on the DC |
-| `spl-search-4728.png` | The EventCode=4728 search and a matching event (Domain Admins group change) |
-| `alert-config.png` | The alert's schedule and trigger condition |
-| `alert-triggered.png` | Trigger history showing the alert firing repeatedly on its 5-minute schedule |
-| `dashboard-panel.png` | The finished dashboard panel showing 4728 events over time |
+| `Image 1.png` | `splunk status` confirming splunkd running on the indexer |
+| `Image 2.png` | `sshd_config` showing `PermitRootLogin no` |
+| `Image 3.png` | Search results for all Windows Security events flowing in |
+| `Image 4.png` | Task Manager showing the SplunkForwarder service running on the DC |
+| `Image 5.png` | The EventCode=4728 search and a matching event (Domain Admins group change) |
+| `Image 6.png` | The alert's schedule and trigger condition |
+| `Image 7.png` | The finished dashboard panel showing 4728 events over time |
+| `Image 8.png` | Trigger history showing the alert firing repeatedly on its 5-minute schedule |
 
 ## Lessons Learned
 
