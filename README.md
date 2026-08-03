@@ -4,7 +4,7 @@ A collection of hands-on cybersecurity projects built to develop practical SOC a
 
 ## Projects
 - [01 — Active Directory Lab (Azure)](./01-active-directory-lab/)
-- 02 — Splunk SIEM (coming soon)
+- - [02 — Splunk SIEM](02-splunk-siem/)
 - 03 — Wazuh EDR (coming soon)
 - 04 — TryHackMe SOC Level 1 (coming soon)
 - 05 — Vulnhub Kioptrix Level 1 (coming soon)
